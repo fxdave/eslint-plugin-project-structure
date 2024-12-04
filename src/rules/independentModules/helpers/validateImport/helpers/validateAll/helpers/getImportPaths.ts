@@ -22,9 +22,6 @@ export const getImportPaths = ({
       const importPaths = paths[key];
 
       return importPaths
-        .map((importPath) =>
-          importPath.replaceAll("../", "").replaceAll("./", ""),
-        )
         .map((importPathReplace) =>
           importPath.replace(keyCleared, importPathReplace.replace("*", "")),
         );
