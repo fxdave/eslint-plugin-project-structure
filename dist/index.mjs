@@ -3335,7 +3335,16 @@ var convertImportPathToNonRelative = ({
 }) => {
   if (!importPath.startsWith(".")) return importPath;
   const dirname2 = path19.dirname(filename);
-  const fullImportPath = path19.resolve(dirname2, path19.join(importPath));
+  const importPathCleaned = importPath.replace(/^:/, "");
+  const fullImportPath1 = path19.resolve(dirname2, importPathCleaned);
+  const fullImportPath2 = path19.resolve(
+    projectRootWithBaseUrl,
+    importPathCleaned
+  );
+  let fullImportPath = fullImportPath1;
+  if (importPath.startsWith(":")) {
+    fullImportPath = fullImportPath2;
+  }
   return removeProjectRootFromPath(fullImportPath, projectRootWithBaseUrl);
 };
 
@@ -3351,7 +3360,10 @@ var getImportPaths = ({
     if (!importPath.includes(keyCleared)) return;
     const importPaths = paths[key];
     return importPaths.map(
-      (importPathReplace) => importPath.replace(keyCleared, importPathReplace.replace("*", ""))
+      (importPathReplace) => importPath.replace(
+        keyCleared,
+        ":" + importPathReplace.replace("*", "")
+      )
     );
   }).flat().filter((v) => !!v);
   if (!imports.length) return [importPath];
