@@ -21,10 +21,12 @@ export const getImportPaths = ({
 
       const importPaths = paths[key];
 
-      return importPaths
-        .map((importPathReplace) =>
-          importPath.replace(keyCleared, importPathReplace.replace("*", "")),
-        );
+      return importPaths.map((importPathReplace) =>
+        importPath.replace(
+          keyCleared,
+          ":" + importPathReplace.replace("*", ""),
+        ),
+      );
     })
     .flat()
     .filter((v): v is string => !!v);

@@ -16,8 +16,19 @@ export const convertImportPathToNonRelative = ({
   if (!importPath.startsWith(".")) return importPath;
 
   const dirname = path.dirname(filename);
+  const importPathCleaned = importPath.replace(/^:/, "");
 
-  const fullImportPath = path.resolve(dirname, path.join(importPath));
+  const fullImportPath1 = path.resolve(dirname, importPathCleaned);
+  const fullImportPath2 = path.resolve(
+    projectRootWithBaseUrl,
+    importPathCleaned,
+  );
+
+  let fullImportPath = fullImportPath1;
+
+  if (importPath.startsWith(":")) {
+    fullImportPath = fullImportPath2;
+  }
 
   return removeProjectRootFromPath(fullImportPath, projectRootWithBaseUrl);
 };
